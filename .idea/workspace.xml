@@ -730,6 +730,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/application/models" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -754,7 +755,7 @@
       <workItem from="1615138431611" duration="104000" />
       <workItem from="1615138685674" duration="8993000" />
       <workItem from="1615182233065" duration="2189000" />
-      <workItem from="1615194353728" duration="11578000" />
+      <workItem from="1615194353728" duration="11968000" />
     </task>
     <servers />
   </component>
