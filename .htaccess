@@ -7,6 +7,9 @@
     #previously this would not have been possible.
     #'system' can be replaced if you have renamed your system folder.
     RewriteCond %{REQUEST_URI} ^system.*
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
     RewriteRule ^(.*)$ /index.php?/$1 [L]
  
     #When your application folder isn't in the system folder
@@ -14,6 +17,9 @@
     #Submitted by: Fabdrol
     #Rename 'application' to your applications folder name.
     RewriteCond %{REQUEST_URI} ^application.*
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
     RewriteRule ^(.*)$ /index.php?/$1 [L]
  
     #Checks to see if the user is attempting to access a valid file,
@@ -21,6 +27,9 @@
     #request to index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
     RewriteRule ^(.*)$ index.php?/$1 [L]
 </IfModule>
  
@@ -31,3 +40,9 @@
  
     ErrorDocument 404 /index.php
 </IfModule>
+RewriteCond %{HTTP_HOST} ^wakeupindia\.tv$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.wakeupindia\.tv$
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteRule ^/?$ "http\:\/\/wakeupindia\.tv\/index\.html" [R=301,L]
+

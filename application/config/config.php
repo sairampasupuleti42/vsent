@@ -1,13 +1,34 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-
+/*
+|--------------------------------------------------------------------------
+| Base Site URL
+|--------------------------------------------------------------------------
+|
+| URL to your CodeIgniter root. Typically this will be your base URL,
+| WITH a trailing slash:
+|
+|	http://example.com/
+|
+| WARNING: You MUST set this value!
+|
+| If it is not set, then CodeIgniter will try guess the protocol and path
+| your installation, but due to security concerns the hostname will be set
+| to $_SERVER['SERVER_ADDR'] if available, or localhost otherwise.
+| The auto-detection mechanism exists only for convenience during
+| development and MUST NOT be used in production!
+|
+| If you need to allow multiple domains, remember that this file is still
+| a PHP script and you can easily do that on your own.
+|
+*/
 
 date_default_timezone_set('Asia/Kolkata');
-$ark_root  = "http://".$_SERVER['HTTP_HOST'];
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+$ark_root  = $protocol.$_SERVER['HTTP_HOST'];
 $ark_root .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 $config['base_url']	= $ark_root;
-
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -307,7 +328,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = '12NQ1A0542';
 
 /*
 |--------------------------------------------------------------------------
@@ -432,8 +453,8 @@ $config['global_xss_filtering'] = FALSE;
 | 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
 */
 $config['csrf_protection'] = FALSE;
-$config['csrf_token_name'] = 'csrf_test_name';
-$config['csrf_cookie_name'] = 'csrf_cookie_name';
+$config['csrf_token_name'] = 'csrf_ansh_ias';
+$config['csrf_cookie_name'] = 'csrf_ansh_iasc';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
 $config['csrf_exclude_uris'] = array();
