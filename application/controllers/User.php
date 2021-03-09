@@ -27,11 +27,13 @@ class User extends MY_Controller
                                 array(
                                     "name" => $user['name'],
                                     "tokenId" => $user["user_id"],
-                                    "email" => $user['email'],
-                                    "role" => $user['role']),      //Data to be encoded in the JWT
+                                    "email" => $user['email'], "role" => $user['role']
+                                ),      //Data to be encoded in the JWT
                                 $this->secretKey, 'HS512');
 
-                            echo _success('success', 'token', $jwt, 200);
+                            echo _success('success', 'data', [
+                                "name" => $user['name'], "role" => $user['role'],
+                                "token" => $jwt], 200);
                         }
 
                     } else echo _error("User not found !", 409);
