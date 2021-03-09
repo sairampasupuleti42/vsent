@@ -30,6 +30,7 @@ $route['api/orders/order/(:any)'] = "orders/order/$1"; // get order
 // Users
 $route['api/user/add'] = "user/add";  // Addt User
 $route['api/users'] = "user/all";  // Fetch Users
+$route['api/users/drivers'] = "user/all-drivers";  // Fetch Users
 $route['api/user/(:num)'] = "user/details/$1";  // get User
 $route['api/user/delete/(:num)'] = "user/delete/$1";  // get User
 

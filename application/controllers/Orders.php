@@ -32,6 +32,8 @@ class Orders extends MY_Controller
                     $pdata["payment_type"] = !empty($raw["payment_type"]) ? trim($raw["payment_type"]) : "";
                     $discount_amount = !empty($raw["discount_amount"]) ? trim($raw["discount_amount"]) : "";
                     $order_contents = !empty($raw["order_contents"]) ? $raw["order_contents"] : "";
+                    $pdata['created_by'] = $this->curretnUser()->tokenId;
+                    $pdata['created_at'] = date('Y-m-d H:i:s');
                     $order_id = $this->oapi->addOrder($pdata);
                     $total_amount = 0;
                     if (count($order_contents) > 0 && $order_id) {

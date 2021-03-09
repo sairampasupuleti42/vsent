@@ -59,7 +59,9 @@ class User extends MY_Controller
                         $pdata['password'] = !empty($raw['password']) ? md5(trim($raw['password'])) : "";
                         $pdata['name'] = !empty($raw['name']) ? trim($raw['name']) : "";
                         $pdata['role'] = !empty($raw['role']) ? trim($raw['role']) : "";
+                        $pdata['is_active'] = 1;
                         $pdata['email'] = $email;
+                        $pdata['created_by'] = $this->curretnUser()->tokenId;
                         $last_id = $this->um->addUser($pdata);
                         if ($last_id) {
                             echo _success('success', 'data', ["name" => $pdata['name']], 200);
@@ -70,6 +72,12 @@ class User extends MY_Controller
                 }
             }
         }
+    }
+
+    function all_drivers()
+    {
+        $users = $this->um->getUserList(["role" => "DRIVER"]);
+        echo _success('success', 'data', $users, 200);
     }
 
     function delete($user_id)

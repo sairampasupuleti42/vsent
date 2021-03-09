@@ -46,6 +46,8 @@ class Product extends MY_Controller
                     $return_img = base64ToImg($img, $target, $path_slug, 'png');  // Replaces
                     $pdata["product_name"] = $product_name;
                     $pdata["product_image"] = base_url() . str_replace('./', '', $return_img);
+                    $pdata['created_by'] = $this->curretnUser()->tokenId;
+                    $pdata['is_active'] = "1";
                     $last_id = $this->papi->addProduct($pdata);
                     if ($last_id) {
                         $data = $this->papi->getProductById($last_id);
@@ -89,6 +91,8 @@ class Product extends MY_Controller
                     $pdata['margin_amount'] = !empty($raw["margin_amount"]) ? trim($raw["margin_amount"]) : "";
                     $pdata['transport_amount'] = !empty($raw["transport_amount"]) ? trim($raw["transport_amount"]) : "";
                     $pdata['incentive_amount'] = !empty($raw["incentive_amount"]) ? trim($raw["incentive_amount"]) : "";
+                    $pdata['created_by'] = $this->curretnUser()->tokenId;
+                    $pdata['is_active'] = "1";
                     $last_id = $this->vapi->addVariant($pdata);
                     if ($last_id) {
                         $data = $this->vapi->getVariantById($last_id);
