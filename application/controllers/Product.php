@@ -56,7 +56,7 @@ class Product extends MY_Controller
         }
     }
 
-    function variants_order_contents()
+    function variants_for_order_contents()
     {
         $variants = $this->vapi->getVariantsForOrderContents();
         echo _success('success', 'data', $variants, 200);

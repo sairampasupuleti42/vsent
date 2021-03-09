@@ -7,56 +7,74 @@ class Order_model extends CI_Model
         parent::__construct();
     }
 
-    function addCounterOrder($pdata)
+    function addOrder($pdata)
     {
-        $this->db->insert("tbl_counter_orders", $pdata);
+        $this->db->insert("tbl_orders", $pdata);
         return $this->db->insert_id();
     }
 
-    function addCounterOrderContents($pdata)
+
+    function updateOrder($data, $order_id)
     {
-        $this->db->insert("tbl_co_contents", $pdata);
-        return $this->db->insert_id();
+        $this->db->where("order_id", $order_id);
+        return $this->db->update("tbl_orders", $data);
     }
 
-    function updateCounterOrder($data, $counter_id)
+    function getOrderById($order_id)
     {
-        $this->db->where("counter_id", $counter_id);
-        return $this->db->update("tbl_counter_orders", $data);
-    }
-
-    function getCounterOrderById($counter_id)
-    {
-        $this->db->select("co.*");
-        $this->db->where("co.counter_id", $counter_id);
-        $query = $this->db->get("tbl_counter_orders co");
+        $this->db->select("o.*");
+        $this->db->where("o.order_id", $order_id);
+        $query = $this->db->get("tbl_orders o");
         if ($query->num_rows() > 0) {
             return $query->row_array();
         }
     }
 
-    function getCounterOrderContentsByCounterId($counter_id)
+    function addOrderContents($pdata)
     {
-        $this->db->select("coc.*");
-        $this->db->where("coc.counter_id", $counter_id);
-        $query = $this->db->get("tbl_co_contents coc");
+        $this->db->insert("tbl_order_contents", $pdata);
+        return $this->db->insert_id();
+    }
+
+    function getOrderContentsByOrderId($order_id)
+    {
+        $this->db->select("oc.*");
+        $this->db->where("oc.order_id", $order_id);
+        $query = $this->db->get("tbl_order_contents oc");
         if ($query->num_rows() > 0) {
             return $query->row_array();
         }
     }
 
-    public function getCounterOrders($mode = "", $s = [])
+    function getOrderByTypeAndId($order_id, $order_type)
+    {
+        $this->db->select("o.*");
+        $this->db->where("o.order_id", $order_id);
+        $this->db->where("o.order_type", $order_type);
+        $query = $this->db->get("tbl_orders o");
+        if ($query->num_rows() > 0) {
+            return $query->row_array();
+        }
+    }
+
+    public function getOrders($mode = "", $s = [])
     {
         if ($mode == "CNT") {
             $this->db->select("COUNT(1) as CNT");
         } else {
-            $this->db->select("co.*");
+            $this->db->select("o.*");
         }
         if (isset($s['limit']) && isset($s['offset'])) {
             $this->db->limit($s['limit'], $s['offset']);
         }
-        $this->db->order_by("co.counter_id DESC");
-        $query = $this->db->get("tbl_counter_orders  co");
+        if (isset($s['order_type'])) {
+            $this->db->where("o.order_type", $s['order_type']);
+        }
+        if (isset($s['payment_status'])) {
+            $this->db->where("o.payment_status", $s['payment_status']);
+        }
+        $this->db->order_by("o.order_id DESC");
+        $query = $this->db->get("tbl_orders  o");
         if ($query->num_rows() > 0) {
             if ($mode == "CNT") {
                 $row = $query->row_array();

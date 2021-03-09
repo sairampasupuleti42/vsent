@@ -20,7 +20,7 @@ class Product_model extends CI_Model
         return $this->db->update("tbl_products", $data);
     }
 
-    function getProductList($s = array(), $mode = 'DATA')
+    function getProductList($mode = 'DATA', $s = array())
     {
         if ($mode == "CNT") {
             $this->db->select("COUNT(1) as CNT");

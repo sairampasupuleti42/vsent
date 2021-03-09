@@ -31,7 +31,7 @@ class Variant_model extends CI_Model
         return false;
     }
 
-    function getVariantList($s = array(), $mode = 'DATA')
+    function getVariantList($mode = 'DATA', $s = array())
     {
         if ($mode == "CNT") {
             $this->db->select("COUNT(1) as CNT");

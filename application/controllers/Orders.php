@@ -1,4 +1,5 @@
 <?php
+
 class Orders extends MY_Controller
 {
     function __construct()
@@ -14,7 +15,7 @@ class Orders extends MY_Controller
         echo _error("Bad Request !", 400);
     }
 
-    public function counter_order()
+    public function add()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $post = file_get_contents("php://input");
@@ -22,6 +23,7 @@ class Orders extends MY_Controller
                 $raw = (array)json_decode($post);
                 $pdata = [];
                 {
+                    $pdata["order_type"] = !empty($raw["order_type"]) ? trim($raw["order_type"]) : "";
                     $pdata["customer_name"] = !empty($raw["customer_name"]) ? trim($raw["customer_name"]) : "";
                     $pdata["customer_mobile"] = !empty($raw["customer_mobile"]) ? trim($raw["customer_mobile"]) : "";
                     $pdata["customer_gst"] = !empty($raw["customer_gst"]) ? trim($raw["customer_gst"]) : "";
@@ -30,15 +32,15 @@ class Orders extends MY_Controller
                     $pdata["payment_type"] = !empty($raw["payment_type"]) ? trim($raw["payment_type"]) : "";
                     $discount_amount = !empty($raw["discount_amount"]) ? trim($raw["discount_amount"]) : "";
                     $order_contents = !empty($raw["order_contents"]) ? $raw["order_contents"] : "";
-                    $counter_id = $this->oapi->addCounterOrder($pdata);
+                    $order_id = $this->oapi->addOrder($pdata);
                     $total_amount = 0;
-                    if (count($order_contents) > 0 && $counter_id) {
+                    if (count($order_contents) > 0 && $order_id) {
                         foreach ($order_contents as $oc) {
                             $ocpdata = [];
                             $ocpdata["variant_id"] = !empty($oc->variant_id) ? trim($oc->variant_id) : "";
                             $ocpdata["cases"] = !empty($oc->cases) ? trim($oc->cases) : "";
                             $ocpdata["bottles"] = !empty($oc->bottles) ? trim($oc->bottles) : "";
-                            $ocpdata["counter_id"] = $counter_id;
+                            $ocpdata["order_id"] = $order_id;
                             $variant = $this->vapi->getVariantById($oc->variant_id);
                             if (!empty($variant)) {
                                 $case_amount = $oc->cases * $variant['unit_price'];
@@ -47,7 +49,7 @@ class Orders extends MY_Controller
                                 $ocpdata["amount"] = $case_amount + $bottle_amount;
                                 $total_amount += $ocpdata["amount"];
                             }
-                            $this->oapi->addCounterOrderContents($ocpdata);
+                            $this->oapi->addOrderContents($ocpdata);
                         }
 
                     }
@@ -55,27 +57,42 @@ class Orders extends MY_Controller
                     $ucodata['discount_amount'] = $discount_amount;
                     $ucodata['total_amount'] = $total_amount;
                     $ucodata['final_amount'] = $final_amount;
-                    $this->oapi->updateCounterOrder($ucodata, $counter_id);
-                    $co = $this->oapi->getCounterOrderById($counter_id);
-                    $co["order_contents"] = $this->oapi->getCounterOrderContentsByCounterId($counter_id);
+                    $this->oapi->updateOrder($ucodata, $order_id);
+                    $co = $this->oapi->getOrderById($order_id);
+                    $co["order_contents"] = $this->oapi->getOrderContentsByOrderId($order_id);
                     echo _success("success", "data", $co, 200);
                 }
             }
         }
     }
 
-    public function counter_orders($counter_id = null)
+    public function all($order_id = null)
     {
-        if ($counter_id) {
-            $co = $this->oapi->getCounterOrderById($counter_id);
-            $co["order_contents"] = $this->oapi->getCounterOrderContentsByCounterId($counter_id);
-            echo _success("success", "data", $co, 200);
-        } else {
-            $co = $this->oapi->getCounterOrders();
-            foreach ($co as $c) {
-                $cco = $this->oapi->getCounterOrderContentsByCounterId($c["counter_id"]);
-                array_push($c["order_contents"], $cco);
+        $orders = $this->oapi->getOrders();  // fetchng all orders
+        foreach ($orders as $order) {
+
+            $order_contents = $this->oapi->getOrderContentsByOrderId($order["order_id"]);
+
+            if (!empty($order_contents)) {
+                $order["order_contents"] = $order_contents;
+                //array_push($order["order_contents"], $order_contents);
             }
+            $order['order_contents'] = $order_contents;
+        }
+        echo _success("success", "data", $orders, 200);
+    }
+
+    public function unpaid()
+    {
+        $unpaid_orders = $this->oapi->getOrders([], ["payment_status" => "CREDIT"]);
+        echo _success("success", "data", $unpaid_orders, 200);
+    }
+
+    public function order($order_id)
+    {
+        if ($order_id) {
+            $co = $this->oapi->getOrderById($order_id);
+            $co["order_contents"] = $this->oapi->getCounterOrderContentsByCounterId($order_id);
             echo _success("success", "data", $co, 200);
         }
     }

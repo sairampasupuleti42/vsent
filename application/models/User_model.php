@@ -53,7 +53,10 @@ class User_model extends CI_Model
         if (isset($s['limit']) && isset($s['offset'])) {
             $this->db->limit($s['limit'], $s['offset']);
         }
-        $this->db->where_not_in('u.user_id', ['1']);
+        if (isset($s['role']) && isset($s['role'])) {
+            $this->db->limit("u.role", $s['role']);
+        }
+//        $this->db->where_not_in('u.user_id', ['1']);
         $this->db->order_by("u.user_id DESC");
         $query = $this->db->get("tbl_users u");
         if ($query->num_rows() > 0) {
