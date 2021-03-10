@@ -15,6 +15,9 @@ class Api extends MY_Controller
         $data = array();
         echo _error("Bad Request !", 400);
     }
+    function config() {
+
+    }
 
     function dashboard()
     {

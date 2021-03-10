@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="1800fb77-b8a7-48b0-b4b6-c239977a6825" name="vsent-klinger" url="http://ftp.trestotechnologies.com">
+        <fileTransfer host="ftp.trestotechnologies.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="01b9e38d-dc17-495d-8832-4e51b4a1b0b1" name="SPENG" url="http://spengineering.xyz">
+        <fileTransfer host="spengineering.xyz" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
