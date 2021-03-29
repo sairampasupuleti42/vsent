@@ -41,11 +41,13 @@ class Product extends MY_Controller
                     $product_name = !empty($raw["product_name"]) ? trim($raw["product_name"]) : "";
                     $product_image = !empty($raw["product_image"]) ? trim($raw["product_image"]) : "";
                     $path_slug = slugify($product_name);
-                    $target = "./uploads/products/" . $path_slug;
-                    $img = explode(',', $product_image)[1];
-                    $return_img = base64ToImg($img, $target, $path_slug, 'png');  // Replaces
                     $pdata["product_name"] = $product_name;
-                    $pdata["product_image"] = base_url() . str_replace('./', '', $return_img);
+                    if (!empty($product_image)) {
+                        $target = "./uploads/products/" . $path_slug;
+                        $img = explode(',', $product_image)[1];
+                        $return_img = base64ToImg($img, $target, $path_slug, 'png');  // Replaces
+                        $pdata["product_image"] = base_url() . str_replace('./', '', $return_img);
+                    }
                     $pdata['created_by'] = $this->curretnUser()->tokenId;
                     $pdata['is_active'] = "1";
                     $last_id = $this->papi->addProduct($pdata);

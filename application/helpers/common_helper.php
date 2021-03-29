@@ -451,6 +451,13 @@ if (!function_exists("transactionFormat")) {
         return $finance_year . $serial;
     }
 }
+if (!function_exists("createTransId")) {
+    function createTransId($type, $number)
+    {
+        $serial = str_pad($number , 3, '0', STR_PAD_LEFT);
+        return $type .date('Ymd'). $serial;
+    }
+}
 
 
 if (!function_exists("getFiles")) {

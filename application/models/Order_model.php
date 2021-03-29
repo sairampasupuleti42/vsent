@@ -39,11 +39,12 @@ class Order_model extends CI_Model
 
     function getOrderContentsByOrderId($order_id)
     {
-        $this->db->select("oc.*");
+        $this->db->select("oc.*,v.variant_name");
         $this->db->where("oc.order_id", $order_id);
+        $this->db->join("tbl_variants v","v.variant_id=oc.variant_id");
         $query = $this->db->get("tbl_order_contents oc");
         if ($query->num_rows() > 0) {
-            return $query->row_array();
+            return $query->result_array();
         }
     }
 
@@ -65,6 +66,7 @@ class Order_model extends CI_Model
         } else {
             $this->db->select("o.*");
         }
+
         if (isset($s['limit']) && isset($s['offset'])) {
             $this->db->limit($s['limit'], $s['offset']);
         }

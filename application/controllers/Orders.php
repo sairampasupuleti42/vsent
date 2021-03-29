@@ -43,6 +43,7 @@ class Orders extends MY_Controller
                             $ocpdata["cases"] = !empty($oc->cases) ? trim($oc->cases) : "";
                             $ocpdata["bottles"] = !empty($oc->bottles) ? trim($oc->bottles) : "";
                             $ocpdata["order_id"] = $order_id;
+
                             $variant = $this->vapi->getVariantById($oc->variant_id);
                             if (!empty($variant)) {
                                 $case_amount = $oc->cases * $variant['unit_price'];
@@ -59,6 +60,14 @@ class Orders extends MY_Controller
                     $ucodata['discount_amount'] = $discount_amount;
                     $ucodata['total_amount'] = $total_amount;
                     $ucodata['final_amount'] = $final_amount;
+                    $order_no_type = "";
+                    if ($pdata["order_type"] === 'COUNTER') {
+                        $order_no_type = "C";
+                    } else {
+                        $order_no_type = "D";
+                    }
+
+                    $ucodata['order_no'] = createTransId($order_no_type, $order_id);
                     $this->oapi->updateOrder($ucodata, $order_id);
                     $co = $this->oapi->getOrderById($order_id);
                     $co["order_contents"] = $this->oapi->getOrderContentsByOrderId($order_id);
@@ -90,11 +99,18 @@ class Orders extends MY_Controller
         echo _success("success", "data", $unpaid_orders, 200);
     }
 
+    public function vehicle($vehicle = "")
+    {
+        $unpaid_orders = $this->oapi->getOrders([], ["payment_status" => ""]);
+        echo _success("success", "data", $unpaid_orders, 200);
+    }
+
+
     public function order($order_id)
     {
         if ($order_id) {
             $co = $this->oapi->getOrderById($order_id);
-            $co["order_contents"] = $this->oapi->getCounterOrderContentsByCounterId($order_id);
+            $co["order_contents"] = $this->oapi->getOrderContentsByOrderId($order_id);
             echo _success("success", "data", $co, 200);
         }
     }
